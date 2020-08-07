@@ -19,5 +19,10 @@ public:
 	ATank* GetControlledTank() const;
 
 	virtual void BeginPlay() override; 
+
+	virtual void Tick(float DeltaTime) override;
+
+	// Метод направляет ствол танка на перекрестие прицела
+	void AimTowardsCrosshair();
 	
 };
