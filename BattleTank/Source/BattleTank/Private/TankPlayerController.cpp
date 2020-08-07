@@ -32,7 +32,18 @@ ATank* ATankPlayerController::GetControlledTank() const
 void ATankPlayerController::AimTowardsCrosshair()
 {
 	if (!GetControlledTank()) { return; }
-	// Получить координаты, если луч проходит через прицел
-	// Если луч попадает в ландшафт, то получить координаты этой точки
+
+	FVector HitLocation; // Внешний параметр
+	if (GetSightRayHitLocation(HitLocation)) // Оказывает побочный эффект
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());	
+	}
+}
+
+// Получить координаты точки прицеливания, если луч попадает в ланшафт или в танк
+bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
+{
+	HitLocation = FVector(1.0);
+	return true;
 }
 

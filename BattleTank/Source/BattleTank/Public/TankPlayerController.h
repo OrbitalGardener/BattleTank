@@ -24,5 +24,9 @@ public:
 
 	// Метод направляет ствол танка на перекрестие прицела
 	void AimTowardsCrosshair();
+
+	// Возвращать внешний параметр (OUT)
+	// true при попадании в ландшафт
+	bool GetSightRayHitLocation(FVector& HitLocation) const;
 	
 };
