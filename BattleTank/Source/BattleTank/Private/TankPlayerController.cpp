@@ -36,14 +36,20 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector HitLocation; // Внешний параметр
 	if (GetSightRayHitLocation(HitLocation)) // Оказывает побочный эффект
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());	
+		// UE_LOG(LogTemp, Warning, TEXT("Look direction: %s"), *HitLocation.ToString());	
 	}
 }
 
 // Получить координаты точки прицеливания, если луч попадает в ланшафт или в танк
 bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 {
-	HitLocation = FVector(1.0);
+	// Найти положение прицела на экране в пикселах
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	auto ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
+	
+	// Депроецировать положение прицела на экране в координаты игрового пространства
+	// Посылаем луч вдоль направления взора и выясняем во что он попал (до макс. дистанции)
 	return true;
 }
 
