@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "Engine/World.h"
 #include "BattleTank.h"
 #include "TankPlayerController.h"
 
@@ -36,7 +37,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector HitLocation; // Внешний параметр
 	if (GetSightRayHitLocation(HitLocation)) // Оказывает побочный эффект
 	{
-		// UE_LOG(LogTemp, Warning, TEXT("Look direction: %s"), *HitLocation.ToString());	
+		UE_LOG(LogTemp, Warning, TEXT("Hit location: %s"), *HitLocation.ToString());	
 	}
 }
 
@@ -52,11 +53,32 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation) const
 	FVector LookDirection;
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Look direction: %s"), *LookDirection.ToString());
+		// Посылаем луч вдоль направления взора и выясняем во что он попал (до макс. дистанции)
+		GetLookVectorHitLocation(LookDirection, HitLocation);
 	}
 
-	// Посылаем луч вдоль направления взора и выясняем во что он попал (до макс. дистанции)
 	return true;
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
+{
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+	auto EndLocation = StartLocation + (LookDirection * LineTraceRange);
+	if (GetWorld()->LineTraceSingleByChannel(
+			HitResult,
+			StartLocation,
+			EndLocation,
+			ECollisionChannel::ECC_Visibility)
+		)
+
+		{
+			HitLocation = HitResult.Location;
+			return true;
+		}
+		HitLocation = FVector(0);
+		return false; // Line trace didn't succeed
+
 }
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
