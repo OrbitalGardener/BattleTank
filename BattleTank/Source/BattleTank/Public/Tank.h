@@ -33,4 +33,6 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float LaunchSpeed = 100000; // TODO Выяснить начальную скорость снаряда на выходе из ствола танка
 };
